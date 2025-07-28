@@ -5,15 +5,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 export default function ViewBlog(){
+    const url = import.meta.env.VITE_API_URL;
     const {id} = useParams()
     const navigate = useNavigate()
     const [blog,setBlog] = useState([])
     const fetchSingleBlog = async() => {
-        const response = await axios.get("http://localhost:3000/blog/" + id)
+        const response = await axios.get(url + id)
         setBlog(response.data.data)
     }
     const deleteBlog = async() => {
-        const response = await axios.delete("http://localhost:3000/blog/" + id)
+        const response = await axios.delete(url + id)
         if(response.status === 200){
             alert("Blog deleted successfully!")
             navigate("/")

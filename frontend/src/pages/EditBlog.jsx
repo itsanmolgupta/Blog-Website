@@ -4,11 +4,12 @@ import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom";
 
 function EditBlog() {
+    const url = import.meta.env.VITE_API_URL;
     const { id } = useParams()
     const navigate = useNavigate()
     const [data, setData] = useState({})
     const fetchSingleBlog = async () => {
-        const response = await axios.get("http://localhost:3000/blog/" + id)
+        const response = await axios.get(url + id)
         const data = response.data.data
         if(response.status === 200){
             setData(response.data.data)
@@ -30,7 +31,7 @@ function EditBlog() {
 
     const editBlog = async (e) => {
         e.preventDefault()
-        const response = await axios.patch("http://localhost:3000/blog/" + id, data, {
+        const response = await axios.patch(url + id, data, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }

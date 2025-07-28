@@ -4,7 +4,8 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 
 
-function CreateBlog() {
+function CreateBlog(){
+    const url = import.meta.env.VITE_API_URL;
     const navigate = useNavigate()
     const [data, setData] = useState({
         title : "",
@@ -23,7 +24,7 @@ function CreateBlog() {
 
     const createBlog = async (e) => {
         e.preventDefault()
-        const response = await axios.post("http://localhost:3000/blog", data, {
+        const response = await axios.post(url, data, {
             headers : {
                 "Content-Type" : "multipart/form-data"
             }

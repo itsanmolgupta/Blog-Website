@@ -7,19 +7,21 @@ const app = express()
 const fs = require("fs")
 const cors = require('cors')
 
+const URL = process.env.BASE_URI
+const ORIGIN = process.env.ORIGIN
+
 connectToDatabase()
 app.use(express.json())
 app.use(express.static('./storage'))
 app.use(cors(
     {
-        origin: "http://localhost:5173"
+        origin: ORIGIN
     }
 ))
 
 const upload = multer({storage : storage})
 
 app.get('/', (req, res)=>{
-    // res.send("Hello World")
     res.json({
         message : "This is home page"
     })
@@ -29,7 +31,7 @@ app.post("/blog", upload.single('image'), async(req, res)=>{
     const {title, subtitle, image, description} = req.body
     let filename;
     if(req.file)
-        filename = "http://localhost:3000/" + req.file.filename
+        filename = URL + req.file.filename
     else
         filename = "https://static8.depositphotos.com/1323882/960/i/450/depositphotos_9603036-stock-photo-blog-concept.jpg"
     if(!title || !subtitle || !description){
@@ -75,7 +77,7 @@ app.delete("/blog/:id", async (req, res)=>{
     const id = req.params.id
     const blog = await Blog.findById(id)
     let imageName = blog.image
-    const prefix = "http://localhost:3000/";
+    const prefix = URL;
     if (imageName.startsWith(prefix)) {
         imageName = imageName.replace(prefix, "");
     }
@@ -95,10 +97,10 @@ app.patch("/blog/:id", upload.single('image'), async (req, res)=>{
     const {title, subtitle, image, description} = req.body
     let imageName;
     if(req.file){
-        imageName = "http://localhost:3000/" + req.file.filename
+        imageName = URL + req.file.filename
         const blog = await Blog.findById(id)
         let oldImageName = blog.image
-        const prefix = "http://localhost:3000/";
+        const prefix = URL;
         if (oldImageName.startsWith(prefix)) {
             oldImageName = oldImageName.replace(prefix, "");
         }
